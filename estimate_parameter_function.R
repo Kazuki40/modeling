@@ -47,19 +47,19 @@ estimate_parameter_function <- function(estimate_para_func, para_0) {
   #likelihood ratio
   #McFadden
   likelihood_ratio <-
-    ((ln_likelihood_0 - ln_likelihood_last) / ln_likelihood_0)
+    1- (ln_likelihood_last / ln_likelihood_0)
   
   #modified likelihood ratio
-  modified_likelihood_ratio <-
-    ((ln_likelihood_0 - (ln_likelihood_last - length(para_0))) / ln_likelihood_0)
+  modified_likelihood_ratio <- ((data_length-length(para_0))/data_length)*likelihood_ratio
+ 
   
   #cox and snell
   cox_snell <-
-    1 - (exp(ln_likelihood_0) / exp(ln_likelihood_last)) ^ (2 / data_length)
+     1 - exp(-(2/data_length)*(ln_likelihood_last-ln_likelihood_0))
   
   #Nagelkerke
   nagelkerke <-
-    cox_snell / (1 - (exp(ln_likelihood_0)) ^ (2 / data_length))
+    cox_snell / (1-exp((2/data_length)*ln_likelihood_0))
   
   #deviance
   D <- -2 * (ln_likelihood_0 - ln_likelihood_last)
